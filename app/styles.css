@@ -1,11 +1,72 @@
+/* Menambahkan margin untuk container agar lebih terpusat */
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Untuk desktop dan perangkat dengan layar lebih besar */
+h2.display-4 {
+  font-size: 3.5rem;  /* Ukuran lebih kecil untuk desktop */
+  word-wrap: break-word;
+  text-align: center;
+  margin-bottom: 20px; /* Menambah jarak bawah untuk memberi ruang */
+  margin-top: 10px;  /* Menambah sedikit jarak atas */
+}
+
+/* Untuk perangkat mobile */
+@media (max-width: 768px) {
+  h2.display-4 {
+    font-size: 2rem;  /* Ukuran font lebih kecil di perangkat kecil */
+    text-align: center;
+    margin-bottom: 15px; /* Menambah jarak bawah di perangkat kecil */
+    margin-top: 5px;  /* Menambah sedikit jarak atas */
+  }
+
+  /* Deskripsi dan tombol di perangkat mobile */
+  .lead {
+    font-size: 1rem;  /* Ukuran font lebih kecil di perangkat mobile */
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  /* Button marketplace agar lebih sesuai di perangkat mobile */
+  .d-flex .btn {
+    font-size: 0.7rem;  /* Ukuran font tombol lebih kecil di mobile */
+    margin: 5px;
+    padding: 6px 12px;
+  }
+
+  /* Mengatur ukuran untuk teks lainnya agar proporsional dengan judul */
+  .product-title, .product-description {
+    font-size: 0.6rem;  /* Ukuran font untuk judul dan deskripsi lebih kecil */
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .container {
+    padding: 15px;
+    margin-top: 10px;
+  }
+}
+
+/* Button dengan efek gradient */
 .btn-gradient-red {
-    background: linear-gradient(to bottom, #FF7F50, #FF1493);
-    color: white;
-    border: none;
-    transition: background 0.3s ease;
-  }
-  
-  .btn-gradient-red:hover {
-    background: linear-gradient(to bottom, #FF1493, #FF7F50);
-    color: white;
-  }
+  background: linear-gradient(to bottom, #FF7F50, #FF1493);
+  color: white;
+  border: none;
+  border-radius: 5px; /* Memberikan sudut yang lebih melengkung */
+  padding: 8px 16px;
+  font-size: 1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+  margin: 8px 0;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Hover effect untuk tombol */
+.btn-gradient-red:hover {
+  background: linear-gradient(to bottom, #FF1493, #FF7F50);
+  color: white;
+  transform: translateY(-2px);
+}
