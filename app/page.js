@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head'; // Import Head dari next/head
 import './styles.css'; // Pastikan untuk mengimpor file CSS
@@ -19,10 +19,19 @@ export default function Home() {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false); // State untuk memeriksa apakah CAPTCHA sudah diverifikasi
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State untuk disable button
 
+  const resultRef = useRef(null); // Ref untuk menandai tempat notifikasi muncul
+
   // Pastikan kita hanya melakukan render di client-side
   useEffect(() => {
     setIsClient(true); // Set isClient menjadi true setelah komponen dirender di client-side
   }, []);
+
+  // Menambahkan fungsi untuk scroll otomatis
+  useEffect(() => {
+    if (resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll halus ke notifikasi
+    }
+  }, [result]); // Akan dipanggil setiap kali `result` berubah
 
   const handleCheck = async () => {
     if (!serial.trim() || !whatsappNumber.trim() || !dob.trim() || !location.trim() || !captchaToken) return; // Pastikan CAPTCHA sudah ada
@@ -93,7 +102,7 @@ export default function Home() {
 
     if (result.status === 'activated') {
       return (
-        <div className="alert alert-success mt-4">
+        <div ref={resultRef} className="alert alert-success mt-4">
           ✅ Serial valid! Garansi aktif pada: {formatDate(result.date)}<br />
           <strong>Nama Pembeli:</strong> {result.name}<br />
           <strong>Tanggal Lahir:</strong> {formatDate(result.dob)}<br />
@@ -105,15 +114,15 @@ export default function Home() {
     }
 
     if (result.status === 'already_activated') {
-      return <div className="alert alert-warning mt-4">⚠️ Serial sudah pernah diaktivasi pada: {formatDate(result.date)}</div>;
+      return <div ref={resultRef} className="alert alert-warning mt-4">⚠️ Serial sudah pernah diaktivasi pada: {formatDate(result.date)}</div>;
     }
 
     if (result.status === 'not_found') {
-      return <div className="alert alert-danger mt-4">❌ Nomor Serial Number Produk Tidak Ditemukan!</div>;
+      return <div ref={resultRef} className="alert alert-danger mt-4">❌ Nomor Serial Number Produk Tidak Ditemukan!</div>;
     }
 
     if (result.status === 'error') {
-      return <div className="alert alert-danger mt-4">❌ Gagal menghubungi server. Coba lagi nanti.</div>;
+      return <div ref={resultRef} className="alert alert-danger mt-4">❌ Gagal menghubungi server. Coba lagi nanti.</div>;
     }
   };
 
