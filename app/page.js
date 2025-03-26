@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head'; // Import Head dari next/head
+import './styles.css'; // Pastikan untuk mengimpor file CSS
 
 export default function Home() {
   const [serial, setSerial] = useState('');
@@ -130,6 +131,13 @@ export default function Home() {
   />
   <h1 className="display-4">Cek Keaslian Produk Transformers</h1>
   <p className="lead">Verifikasi garansi dan keaslian produk Transformers Anda dengan mudah.</p>
+  <div className="d-flex justify-content-center align-items-center mb-4">
+    <p className="lead mb-0 me-2">Temukan kami disini :</p>
+    <a href="https://shopee.co.id/shop/1325393615" className="btn btn-gradient-red me-2">Shopee</a>
+    <a href="https://shopee.co.id/transformersstoreindonesia" className="btn btn-gradient-red me-2">Shopee Mall</a>
+    <a href="https://www.tokopedia.com/transformers-indonesia" className="btn btn-gradient-red me-2">Tokopedia</a>
+    <a href="https://vt.tiktok.com/ZSMxBjVKk/" className="btn btn-gradient-red">Tiktok</a>
+  </div>
 </header>
 
       {/* Form Section */}
@@ -160,7 +168,7 @@ export default function Home() {
             <input type="text" id="address" name="address" className="form-control" value={location} onChange={(e) => setLocation(e.target.value)} disabled={loading} required />
           </div>
 
-          <button type="button" className="btn btn-warning w-100" onClick={handleCheck} disabled={loading}>
+          <button type="button" className="btn btn-gradient-red w-100" onClick={handleCheck} disabled={loading}>
             {loading ? 'Memeriksa...' : 'Cek Sekarang'}
           </button>
         </form>
