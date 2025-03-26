@@ -131,12 +131,12 @@ export default function Home() {
   />
   <h1 className="display-4">Cek Keaslian Produk Transformers</h1>
   <p className="lead">Verifikasi garansi dan keaslian produk Transformers Anda dengan mudah.</p>
-  <div className="d-flex justify-content-center align-items-center mb-4">
+  <div className="d-flex flex-wrap justify-content-center align-items-center mb-4">
     <p className="lead mb-0 me-2">Temukan kami disini :</p>
-    <a href="https://shopee.co.id/shop/1325393615" className="btn btn-gradient-red me-2">Shopee</a>
-    <a href="https://shopee.co.id/transformersstoreindonesia" className="btn btn-gradient-red me-2">Shopee Mall</a>
-    <a href="https://www.tokopedia.com/transformers-indonesia" className="btn btn-gradient-red me-2">Tokopedia</a>
-    <a href="https://vt.tiktok.com/ZSMxBjVKk/" className="btn btn-gradient-red">Tiktok</a>
+    <a href="https://shopee.co.id/shop/1325393615" className="btn btn-gradient-red me-2 mb-2">Shopee</a>
+    <a href="https://shopee.co.id/transformersstoreindonesia" className="btn btn-gradient-red me-2 mb-2">Shopee Mall</a>
+    <a href="https://www.tokopedia.com/transformers-indonesia" className="btn btn-gradient-red me-2 mb-2">Tokopedia</a>
+    <a href="https://vt.tiktok.com/ZSMxBjVKk/" className="btn btn-gradient-red mb-2">Tiktok</a>
   </div>
 </header>
 
