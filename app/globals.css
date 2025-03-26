@@ -8,13 +8,17 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+
+  h1 {
+    color: white; /* Ganti warna teks h1 menjadi putih untuk mode gelap */
+  }
 }
 
 html,
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f8f9fa;
-  color: #333;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .container {
@@ -28,7 +32,7 @@ body {
 
 h1 {
   text-align: center;
-  color: #222;
+  color: #222; /* Warna default untuk mode terang */
   font-size: 32px;
   margin-bottom: 20px;
 }
