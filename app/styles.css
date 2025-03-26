@@ -1,11 +1,11 @@
 .btn-gradient-red {
-  background: linear-gradient(to bottom, #FF7F50, #FF1493);
-  color: white;
-  border: none;
-  transition: background 0.3s ease;
-}
-
-.btn-gradient-red:hover {
-  background: linear-gradient(to bottom, #FF1493, #FF7F50);
-  color: white;
-}
+    background: linear-gradient(to bottom, #FF7F50, #FF1493);
+    color: white;
+    border: none;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-gradient-red:hover {
+    background: linear-gradient(to bottom, #FF1493, #FF7F50);
+    color: white;
+  }

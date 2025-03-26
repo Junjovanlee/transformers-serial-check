@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head'; // Import Head dari next/head
 import './styles.css'; // Pastikan untuk mengimpor file CSS
+import ReCAPTCHA from 'react-google-recaptcha'; // Import reCAPTCHA
 
 export default function Home() {
   const [serial, setSerial] = useState('');
@@ -13,7 +14,10 @@ export default function Home() {
   const [location, setLocation] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
   const [isClient, setIsClient] = useState(false); // State untuk memeriksa apakah kita di client-side
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false); // State untuk memeriksa apakah CAPTCHA sudah diverifikasi
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State untuk disable button
 
   // Pastikan kita hanya melakukan render di client-side
   useEffect(() => {
@@ -21,7 +25,7 @@ export default function Home() {
   }, []);
 
   const handleCheck = async () => {
-    if (!serial.trim() || !whatsappNumber.trim() || !dob.trim() || !location.trim()) return;
+    if (!serial.trim() || !whatsappNumber.trim() || !dob.trim() || !location.trim() || !captchaToken) return; // Pastikan CAPTCHA sudah ada
 
     if (!whatsappNumber.startsWith('+62')) {
       whatsappNumber = '+62' + whatsappNumber.replace(/^0/, ''); 
@@ -29,6 +33,7 @@ export default function Home() {
 
     setLoading(true);
     setResult(null);
+    setIsButtonDisabled(true); // Disable button saat proses berjalan
 
     const body = new URLSearchParams();
     body.append('serial', serial);
@@ -36,6 +41,7 @@ export default function Home() {
     body.append('dob', dob);
     body.append('location', location);
     body.append('whatsapp', whatsappNumber);
+    body.append('captchaToken', captchaToken); // Kirim token CAPTCHA
 
     try {
       const response = await fetch(
@@ -51,6 +57,15 @@ export default function Home() {
 
       const data = await response.json();
       setResult(data);
+      if (data.status === 'activated') {
+        setIsCaptchaVerified(true); // Menandai bahwa CAPTCHA sudah diverifikasi dan berhasil
+      }
+
+      // Reset CAPTCHA jika status adalah 'already_activated' atau 'not_found'
+      if (data.status === 'already_activated' || data.status === 'not_found') {
+        setCaptchaToken('');
+        setIsCaptchaVerified(false); // Menandai bahwa CAPTCHA perlu diulang
+      }
     } catch (error) {
       console.error('Gagal cek serial:', error);
       setResult({ status: 'error' });
@@ -59,7 +74,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Format Tanggal
   const formatDate = (dateString) => {
     const d = new Date(dateString); // Membuat objek Date dari dateString
     const day = String(d.getDate()).padStart(2, '0'); // Mendapatkan tanggal dan menambah awalan 0 jika perlu
@@ -68,11 +82,10 @@ export default function Home() {
   
     return `${day}-${month}-${year}`; // Mengembalikan hasil dalam format dd-mm-yyyy
   };
-  
 
   const handleWhatsappChange = (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, ''); 
-    setWhatsappNumber(value);
+    const value = e.target.value.replace(/[^0-9]/g, ''); // Hanya mengizinkan angka
+    setWhatsappNumber(value); // Menyimpan nilai nomor WhatsApp yang hanya angka
   };
 
   const renderResult = () => {
@@ -118,57 +131,68 @@ export default function Home() {
       
       {/* Toko Name Section */}
       <header className="text-center py-2 bg-dark text-white">
-  <h2 className="display-4">TRANSFORMERS OFFICIAL INDONESIA</h2>
-</header>
+        <h2 className="display-4">TRANSFORMERS OFFICIAL INDONESIA</h2>
+      </header>
 
       {/* Hero Section */}
       <header className="bg-dark text-white text-center py-3">
-  <img
-    src="images/Banner.jpg" // Pastikan gambar ada di folder public
-    alt="Transformers Banner"
-    className="img-fluid mb-4"
-    style={{ maxHeight: '400px', objectFit: 'cover' }}
-  />
-  <h1 className="display-4">Cek Keaslian Produk Transformers</h1>
-  <p className="lead">Verifikasi garansi dan keaslian produk Transformers Anda dengan mudah.</p>
-  <div className="d-flex flex-wrap justify-content-center align-items-center mb-4">
-    <p className="lead mb-0 me-2">Temukan kami disini :</p>
-    <a href="https://shopee.co.id/shop/1325393615" className="btn btn-gradient-red me-2 mb-2">Shopee</a>
-    <a href="https://shopee.co.id/transformersstoreindonesia" className="btn btn-gradient-red me-2 mb-2">Shopee Mall</a>
-    <a href="https://www.tokopedia.com/transformers-indonesia" className="btn btn-gradient-red me-2 mb-2">Tokopedia</a>
-    <a href="https://vt.tiktok.com/ZSMxBjVKk/" className="btn btn-gradient-red mb-2">Tiktok</a>
-  </div>
-</header>
+        <img
+          src="images/Banner.jpg" // Pastikan gambar ada di folder public
+          alt="Transformers Banner"
+          className="img-fluid mb-4"
+          style={{ maxHeight: '400px', objectFit: 'cover' }}
+        />
+        <h1 className="display-4">Cek Keaslian Produk Transformers</h1>
+        <p className="lead">Verifikasi garansi dan keaslian produk Transformers Anda dengan mudah.</p>
+        <div className="d-flex flex-wrap justify-content-center align-items-center mb-4">
+          <p className="lead mb-0 me-2">Temukan kami disini :</p>
+          <a href="https://shopee.co.id/shop/1325393615" className="btn btn-gradient-red me-2 mb-2">Shopee</a>
+          <a href="https://shopee.co.id/transformersstoreindonesia" className="btn btn-gradient-red me-2 mb-2">Shopee Mall</a>
+          <a href="https://www.tokopedia.com/transformers-indonesia" className="btn btn-gradient-red me-2 mb-2">Tokopedia</a>
+          <a href="https://vt.tiktok.com/ZSMxBjVKk/" className="btn btn-gradient-red mb-2">Tiktok</a>
+        </div>
+      </header>
 
       {/* Form Section */}
       <main className="container my-5">
         <form action="/submit" method="POST">
           <div className="mb-3">
             <label htmlFor="serial" className="form-label">Serial Number</label>
-            <input type="text" id="serial" name="serial" className="form-control" value={serial} onChange={(e) => setSerial(e.target.value)} disabled={loading} required />
+            <input type="text" id="serial" name="serial" className="form-control" value={serial} onChange={(e) => setSerial(e.target.value)} disabled={loading || isButtonDisabled} required />
           </div>
 
           <div className="mb-3">
             <label htmlFor="name" className="form-label">Nama Pembeli</label>
-            <input type="text" id="name" name="name" className="form-control" value={name} onChange={(e) => setName(e.target.value)} disabled={loading} required />
+            <input type="text" id="name" name="name" className="form-control" value={name} onChange={(e) => setName(e.target.value)} disabled={loading || isButtonDisabled} required />
           </div>
 
           <div className="mb-3">
             <label htmlFor="phone" className="form-label">Nomor Telepon</label>
-            <input type="tel" id="phone" name="phone" className="form-control" value={whatsappNumber} onChange={handleWhatsappChange} disabled={loading} required />
+            <input type="tel" id="phone" name="phone" className="form-control" value={whatsappNumber} onChange={handleWhatsappChange} disabled={loading || isButtonDisabled} required />
           </div>
 
           <div className="mb-3">
             <label htmlFor="dob" className="form-label">Tanggal Lahir</label>
-            <input type="date" id="dob" name="dob" className="form-control" value={dob} onChange={(e) => setDob(e.target.value)} disabled={loading} required />
+            <input type="date" id="dob" name="dob" className="form-control" value={dob} onChange={(e) => setDob(e.target.value)} disabled={loading || isButtonDisabled} required />
           </div>
 
           <div className="mb-3">
             <label htmlFor="address" className="form-label">Kota</label>
-            <input type="text" id="address" name="address" className="form-control" value={location} onChange={(e) => setLocation(e.target.value)} disabled={loading} required />
+            <input type="text" id="address" name="address" className="form-control" value={location} onChange={(e) => setLocation(e.target.value)} disabled={loading || isButtonDisabled} required />
           </div>
 
-          <button type="button" className="btn btn-gradient-red w-100" onClick={handleCheck} disabled={loading}>
+          {/* CAPTCHA */}
+          <div className="mb-3">
+            <ReCAPTCHA
+              sitekey="6LevtQArAAAAAEjo8fGnnPGqBvENUuO9Jf8RNwiB"
+              onChange={(token) => {
+                setCaptchaToken(token);
+                setIsCaptchaVerified(false); // Reset CAPTCHA setelah verifikasi
+              }} 
+            />
+          </div>
+
+          <button type="button" className="btn btn-gradient-red w-100" onClick={handleCheck} disabled={loading || isButtonDisabled}>
             {loading ? 'Memeriksa...' : 'Cek Sekarang'}
           </button>
         </form>
