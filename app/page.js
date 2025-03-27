@@ -118,7 +118,7 @@ export default function Home() {
     }
 
     if (result.status === 'not_found') {
-      return <div ref={resultRef} className="alert alert-danger mt-4">❌ Nomor Serial Number Produk Tidak Ditemukan!</div>;
+      return <div ref={resultRef} className="alert alert-danger mt-4">❌ Nomor Serial Number Produk Tidak Ditemukan! Pastikan Membeli Produk Di Official Store Kami.</div>;
     }
 
     if (result.status === 'error') {
@@ -166,7 +166,7 @@ export default function Home() {
       <main className="container my-5">
         <form action="/submit" method="POST">
           <div className="mb-3">
-            <label htmlFor="serial" className="form-label">Serial Number</label>
+            <label htmlFor="serial" className="form-label">Serial Number ( Contoh : TF-A0123456789 )</label>
             <input type="text" id="serial" name="serial" className="form-control" value={serial} onChange={(e) => setSerial(e.target.value)} disabled={loading || isButtonDisabled} required />
           </div>
 
@@ -210,7 +210,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center py-3 bg-dark text-white">
-        <p>© 2025 Transformers Official Store</p>
+        <p>© 2025 Transformers Official Indonesia</p>
       </footer>
     </div>
   );
